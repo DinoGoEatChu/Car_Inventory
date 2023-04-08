@@ -17,33 +17,60 @@ import java.util.*
 class InventoryController : Initializable {
 
 
-    @FXML lateinit var deleteCar: Button
-    @FXML lateinit var changeCar: Button
-    @FXML lateinit var newCar: Button
-    @FXML lateinit var unsoldCheck: CheckBox
-    @FXML lateinit var soldCheck: CheckBox
-    @FXML lateinit var searchButton: Button
-    @FXML lateinit var searchBar: TextField
-    @FXML lateinit var financed: TableColumn<Car, String>
-    @FXML lateinit var title: TableColumn<Car, String>
-    @FXML lateinit var labor: TableColumn<Car, String>
-    @FXML lateinit var check: TableColumn<Car, String>
-    @FXML lateinit var towing: TableColumn<Car, String>
-    @FXML lateinit var total: TableColumn<Car, String>
-    @FXML lateinit var invoices: TableColumn<Car, String>
-    @FXML lateinit var soldTo: TableColumn<Car, String>
-    @FXML lateinit var salePrice: TableColumn<Car, String>
-    @FXML lateinit var soldDate: TableColumn<Car, LocalDate?>
-    @FXML lateinit var cost: TableColumn<Car, String>
-    @FXML lateinit var from: TableColumn<Car, String>
-    @FXML lateinit var purchaseDate: TableColumn<Car, LocalDate>
-    @FXML lateinit var mileage: TableColumn<Car, String>
-    @FXML lateinit var vin: TableColumn<Car, String>
-    @FXML lateinit var year: TableColumn<Car, String>
-    @FXML lateinit var model: TableColumn<Car, String>
-    @FXML lateinit var make: TableColumn<Car, String>
-    @FXML lateinit var stockID: TableColumn<Car, String>
-    @FXML lateinit var tableView: TableView<Car>
+    @FXML
+    lateinit var deleteCar: Button
+    @FXML
+    lateinit var changeCar: Button
+    @FXML
+    lateinit var newCar: Button
+    @FXML
+    lateinit var unsoldCheck: CheckBox
+    @FXML
+    lateinit var soldCheck: CheckBox
+    @FXML
+    lateinit var searchButton: Button
+    @FXML
+    lateinit var searchBar: TextField
+    @FXML
+    lateinit var financed: TableColumn<Car, String>
+    @FXML
+    lateinit var title: TableColumn<Car, String>
+    @FXML
+    lateinit var labor: TableColumn<Car, String>
+    @FXML
+    lateinit var check: TableColumn<Car, String>
+    @FXML
+    lateinit var towing: TableColumn<Car, String>
+    @FXML
+    lateinit var total: TableColumn<Car, String>
+    @FXML
+    lateinit var invoices: TableColumn<Car, String>
+    @FXML
+    lateinit var soldTo: TableColumn<Car, String>
+    @FXML
+    lateinit var salePrice: TableColumn<Car, String>
+    @FXML
+    lateinit var soldDate: TableColumn<Car, LocalDate?>
+    @FXML
+    lateinit var cost: TableColumn<Car, String>
+    @FXML
+    lateinit var from: TableColumn<Car, String>
+    @FXML
+    lateinit var purchaseDate: TableColumn<Car, LocalDate>
+    @FXML
+    lateinit var mileage: TableColumn<Car, String>
+    @FXML
+    lateinit var vin: TableColumn<Car, String>
+    @FXML
+    lateinit var year: TableColumn<Car, String>
+    @FXML
+    lateinit var model: TableColumn<Car, String>
+    @FXML
+    lateinit var make: TableColumn<Car, String>
+    @FXML
+    lateinit var stockID: TableColumn<Car, String>
+    @FXML
+    lateinit var tableView: TableView<Car>
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         stockID.cellValueFactory = PropertyValueFactory<Car, String>("stockID")
@@ -70,26 +97,26 @@ class InventoryController : Initializable {
 
     @FXML
     fun onNew(actionEvent: ActionEvent) {
-            // Load the NewCar.fxml file
-            val fxmlLoader = FXMLLoader(javaClass.getResource("newCar.fxml"))
-            val newCarRoot = fxmlLoader.load<Parent>()
+        // Load the NewCar.fxml file
+        val fxmlLoader = FXMLLoader(javaClass.getResource("newCar.fxml"))
+        val newCarRoot = fxmlLoader.load<Parent>()
 
-            // Get the NewCar controller instance
-            val newCarController = fxmlLoader.getController<NewCar>()
+        // Get the NewCar controller instance
+        val newCarController = fxmlLoader.getController<NewCar>()
 
-            // Pass the parameters using init function
-            newCarController.init(null) { updatedCar: Car ->
-                // Add the updated car to the tableView
-                tableView.items.add(updatedCar)
-            }
+        // Pass the parameters using init function
+        newCarController.init(null) { updatedCar: Car ->
+            // Add the updated car to the tableView
+            tableView.items.add(updatedCar)
+        }
 
 
-            // Show the NewCar window
-            val newCarStage = Stage()
-            newCarStage.initModality(Modality.APPLICATION_MODAL)
-            newCarStage.title = "New Car"
-            newCarStage.scene = Scene(newCarRoot)
-            newCarStage.show()
+        // Show the NewCar window
+        val newCarStage = Stage()
+        newCarStage.initModality(Modality.APPLICATION_MODAL)
+        newCarStage.title = "New Car"
+        newCarStage.scene = Scene(newCarRoot)
+        newCarStage.show()
     }
 
     @FXML
@@ -124,16 +151,28 @@ class InventoryController : Initializable {
     }
 
 
-
     @FXML
     fun onDelete(actionEvent: ActionEvent) {
         // Handle the delete car button click event
+        val selectedCar = tableView.selectionModel.selectedItem
+        if (selectedCar != null) {
+            val alert = Alert(Alert.AlertType.WARNING)
+            alert.title = "DELETE CAR"
+            alert.headerText = "Are you sure you want to DELETE CAR?"
+            val okButton = ButtonType.OK
+            val cancelButton = ButtonType.CANCEL
+            alert.buttonTypes.setAll(okButton, cancelButton)
+            val result = alert.showAndWait()
+
+
+            if (result.get() == ButtonType.OK) {
+                tableView.items.remove(selectedCar)
+            } else if (result.get() == ButtonType.CANCEL) {
+                return
+            }
+        }
     }
-
-
-
-    // Add event handlers for any other buttons or user
-    }
+}
 
 data class Car(
     val stockID: String,
