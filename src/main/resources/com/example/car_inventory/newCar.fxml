@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="976.0" prefWidth="1176.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.car_inventory.NewCar">
+   <children>
+      <Label layoutX="1023.0" layoutY="32.0" scaleX="3.0" scaleY="3.0" scaleZ="3.0" text="New Car" />
+      <TextField fx:id="stock" layoutX="130.0" layoutY="130.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="year" layoutX="130.0" layoutY="339.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="make" layoutX="130.0" layoutY="200.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="miles" layoutX="130.0" layoutY="472.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="model" layoutX="130.0" layoutY="270.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="from" layoutX="130.0" layoutY="613.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="vin" layoutX="130.0" layoutY="409.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="cost" layoutX="130.0" layoutY="672.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="title" layoutX="550.0" layoutY="617.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <TextField fx:id="salePrice" layoutX="130.0" layoutY="814.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="labor" layoutX="550.0" layoutY="549.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <TextField fx:id="soldTo" layoutX="130.0" layoutY="888.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextField fx:id="total" layoutX="550.0" layoutY="342.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <TextField fx:id="check" layoutX="550.0" layoutY="481.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <TextField fx:id="towing" layoutX="550.0" layoutY="412.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="96.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Stock#" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="169.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Make" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="239.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Model" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="314.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Year" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="380.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="V.I.N." />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="448.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Mileage" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="516.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Date Purchased" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="584.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="From" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="649.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Cost" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="784.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Sale Price" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="862.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Sold To" />
+      <Label layoutX="585.0" layoutY="99.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Parts &amp; Invoices" />
+      <Label layoutX="615.0" layoutY="311.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Total" />
+      <Label layoutX="611.0" layoutY="380.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Towing" />
+      <Label layoutX="614.0" layoutY="451.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Check" />
+      <Label layoutX="614.0" layoutY="519.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Labor" />
+      <Label layoutX="618.0" layoutY="587.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Title" />
+      <Label layoutX="615.0" layoutY="695.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Financed" />
+      <Label contentDisplay="CENTER" layoutX="190.0" layoutY="711.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Date Sold" />
+      <DatePicker fx:id="datePur" layoutX="130.0" layoutY="548.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <DatePicker fx:id="dateSold" layoutX="130.0" layoutY="736.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" />
+      <TextArea fx:id="parts" layoutX="550.0" layoutY="149.0" prefHeight="126.0" prefWidth="371.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <TextArea fx:id="financed" layoutX="550.0" layoutY="740.0" prefHeight="126.0" prefWidth="371.0" scaleX="1.3" scaleY="1.3" scaleZ="1.3" translateX="20.0" />
+      <Button fx:id="saveButton" layoutX="1014.0" layoutY="355.0" mnemonicParsing="false" onAction="#onSave" prefHeight="26.0" prefWidth="54.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Save" />
+      <Button fx:id="cancelButton" layoutX="1014.0" layoutY="481.0" mnemonicParsing="false" onAction="#onCancel" prefHeight="26.0" prefWidth="54.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Cancel" />
+   </children>
+</AnchorPane>

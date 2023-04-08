@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="tab" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1590.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.car_inventory.InventoryController">
+    <TableView id="inventoryTable" fx:id="tableView" layoutX="8.0" layoutY="43.0" prefHeight="637.0" prefWidth="1573.0">
+        <columns>
+            <TableColumn id="stockColumn" fx:id="stockID" prefWidth="47.428574562072754" text="Stock #" />
+            <TableColumn id="make" fx:id="make" prefWidth="69.4285888671875" text="Make" />
+            <TableColumn id="model" fx:id="model" prefWidth="62.71428680419922" text="Model" />
+            <TableColumn id="year" fx:id="year" prefWidth="40.428558349609375" text="Year" />
+            <TableColumn id="vin" fx:id="vin" prefWidth="202.42857360839844" text="V.I.N." />
+            <TableColumn id="mileage" fx:id="mileage" minWidth="1.4285888671875" prefWidth="59.0" text="Mileage" />
+            <TableColumn id="purchaseDate" fx:id="purchaseDate" prefWidth="101.0" text="Date Purchased" />
+            <TableColumn id="from" fx:id="from" prefWidth="66.42852783203125" text="From" />
+            <TableColumn id="cost" fx:id="cost" prefWidth="51.28570556640625" text="Cost" />
+            <TableColumn id="saleDate" fx:id="soldDate" prefWidth="88.85711669921875" text="Date Sold" />
+            <TableColumn id="salePrice" fx:id="salePrice" prefWidth="79.7142333984375" text="Sale Price" />
+            <TableColumn id="soldTo" fx:id="soldTo" prefWidth="83.0" text="Sold To" />
+            <TableColumn id="invoices" fx:id="invoices" prefWidth="218.71417236328125" text="Parts &amp; Invoices" />
+            <TableColumn id="total" fx:id="total" prefWidth="54.4285888671875" text="Total" />
+            <TableColumn id="towing" fx:id="towing" prefWidth="46.5714111328125" text="Towing" />
+            <TableColumn id="check" fx:id="check" prefWidth="53.142822265625" text="Check" />
+            <TableColumn id="Labor" fx:id="labor" prefWidth="62.2857666015625" text="Labor" />
+            <TableColumn id="title" fx:id="title" prefWidth="48.0" text="Title" />
+            <TableColumn id="financed" fx:id="financed" prefWidth="144.5714111328125" text="Financed" />
+        </columns>
+    </TableView>
+    <TextField id="searchBar" fx:id="searchBar" layoutX="710.0" layoutY="14.0" prefHeight="25.0" prefWidth="161.0" />
+    <Button id="searchButton" fx:id="searchButton" layoutX="884.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Search" />
+    <CheckBox id="soldCheck" fx:id="soldCheck" layoutX="166.0" layoutY="18.0" mnemonicParsing="false" text="SOLD Cars" />
+    <CheckBox id="unsoldCheck" fx:id="unsoldCheck" layoutX="271.0" layoutY="18.0" mnemonicParsing="false" text="UNSOLD Cars" />
+    <Button id="newCarButton" fx:id="newCar" layoutX="621.0" layoutY="699.0" mnemonicParsing="false" onAction="#onNew" text="NEW" />
+    <Button id="changeCarButton" fx:id="changeCar" layoutX="784.0" layoutY="699.0" mnemonicParsing="false" onAction="#onChange" text="CHANGE" />
+    <Button id="deleteCarButton" fx:id="deleteCar" layoutX="963.0" layoutY="699.0" mnemonicParsing="false" onAction="#onDelete" text="DELETE" />
+</AnchorPane>
