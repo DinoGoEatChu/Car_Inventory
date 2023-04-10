@@ -1,5 +1,7 @@
 package com.example.car_inventory
 
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
@@ -19,58 +21,83 @@ class InventoryController : Initializable {
 
     @FXML
     lateinit var deleteCar: Button
+
     @FXML
     lateinit var changeCar: Button
+
     @FXML
     lateinit var newCar: Button
+
     @FXML
     lateinit var unsoldCheck: CheckBox
+
     @FXML
     lateinit var soldCheck: CheckBox
-    @FXML
-    lateinit var searchButton: Button
+
     @FXML
     lateinit var searchBar: TextField
+
     @FXML
     lateinit var financed: TableColumn<Car, String>
+
     @FXML
     lateinit var title: TableColumn<Car, String>
+
     @FXML
     lateinit var labor: TableColumn<Car, String>
+
     @FXML
     lateinit var check: TableColumn<Car, String>
+
     @FXML
     lateinit var towing: TableColumn<Car, String>
+
     @FXML
     lateinit var total: TableColumn<Car, String>
+
     @FXML
     lateinit var invoices: TableColumn<Car, String>
+
     @FXML
     lateinit var soldTo: TableColumn<Car, String>
+
     @FXML
     lateinit var salePrice: TableColumn<Car, String>
+
     @FXML
     lateinit var soldDate: TableColumn<Car, LocalDate?>
+
     @FXML
     lateinit var cost: TableColumn<Car, String>
+
     @FXML
     lateinit var from: TableColumn<Car, String>
+
     @FXML
     lateinit var purchaseDate: TableColumn<Car, LocalDate>
+
     @FXML
     lateinit var mileage: TableColumn<Car, String>
+
     @FXML
     lateinit var vin: TableColumn<Car, String>
+
     @FXML
     lateinit var year: TableColumn<Car, String>
+
     @FXML
     lateinit var model: TableColumn<Car, String>
+
     @FXML
     lateinit var make: TableColumn<Car, String>
+
     @FXML
     lateinit var stockID: TableColumn<Car, String>
+
     @FXML
     lateinit var tableView: TableView<Car>
+
+    private lateinit var originalCarList: ObservableList<Car>
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
         stockID.cellValueFactory = PropertyValueFactory<Car, String>("stockID")
@@ -93,7 +120,30 @@ class InventoryController : Initializable {
         title.cellValueFactory = PropertyValueFactory<Car, String>("title")
         financed.cellValueFactory = PropertyValueFactory<Car, String>("financed")
 
+        //store original car list
+        originalCarList = FXCollections.observableArrayList(tableView.items)
+
+        //adds listener function to text property, listener will be called when text content changes
+        searchBar.textProperty().addListener { _, _, _ -> filterCars() }
+
     }
+
+    // search function / filter function
+    private fun filterCars() {
+        val searchText = searchBar.text.lowercase()
+        val filteredCars = if (searchText.isBlank()) {
+            originalCarList
+        } else {
+            originalCarList.filter { car ->
+                car.make.lowercase().contains(searchText) ||
+                car.model.lowercase().contains(searchText) ||
+                car.year.lowercase().contains(searchText) ||
+                car.vin.lowercase().contains(searchText)
+            }
+        }
+        tableView.items.setAll(filteredCars)
+    }
+
 
     @FXML
     fun onNew(actionEvent: ActionEvent) {
@@ -108,6 +158,7 @@ class InventoryController : Initializable {
         newCarController.init(null) { updatedCar: Car ->
             // Add the updated car to the tableView
             tableView.items.add(updatedCar)
+            originalCarList.add(updatedCar)
         }
 
 
@@ -122,12 +173,14 @@ class InventoryController : Initializable {
     @FXML
     fun onChange(actionEvent: ActionEvent) {
         val selectedCar = tableView.selectionModel.selectedItem
+        val selectedIndex = tableView.selectionModel.selectedIndex
 
-        if (selectedCar != null) {
+        if (selectedCar != null && selectedIndex >= 0) {
             // Pass a callback function to the ModifyCarController
             val modifyCar = ModifyCar(selectedCar) { updatedCar ->
                 // Update the selected car in the tableView
-                tableView.items[tableView.selectionModel.selectedIndex] = updatedCar
+                tableView.items[selectedIndex] = updatedCar
+                originalCarList[selectedIndex] = updatedCar
             }
 
             // Load the modify car FXML file and set the controller factory
@@ -150,7 +203,6 @@ class InventoryController : Initializable {
         }
     }
 
-
     @FXML
     fun onDelete(actionEvent: ActionEvent) {
         // Handle the delete car button click event
@@ -164,9 +216,10 @@ class InventoryController : Initializable {
             alert.buttonTypes.setAll(okButton, cancelButton)
             val result = alert.showAndWait()
 
-
             if (result.get() == ButtonType.OK) {
+                val selectedIndex = tableView.selectionModel.selectedIndex
                 tableView.items.remove(selectedCar)
+                originalCarList.removeAt(selectedIndex)
             } else if (result.get() == ButtonType.CANCEL) {
                 return
             }
