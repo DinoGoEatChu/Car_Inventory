@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="tab" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1590.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.car_inventory.InventoryController">
-    <TableView id="inventoryTable" fx:id="tableView" layoutX="8.0" layoutY="43.0" prefHeight="637.0" prefWidth="1573.0">
+<AnchorPane id="tab" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1590.0" style="-fx-background-color: #c0c0c0;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.car_inventory.InventoryController">
+    <TableView id="inventoryTable" fx:id="tableView" layoutX="8.0" layoutY="43.0" prefHeight="637.0" prefWidth="1573.0" style="-fx-background-color: #e4e4e4;">
         <columns>
             <TableColumn id="stockColumn" fx:id="stockID" prefWidth="47.428574562072754" text="Stock #" />
             <TableColumn id="make" fx:id="make" prefWidth="69.4285888671875" text="Make" />
