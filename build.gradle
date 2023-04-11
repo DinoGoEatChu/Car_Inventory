@@ -47,6 +47,9 @@ dependencies {
     implementation("org.openjfx:javafx-fxml:17")
     implementation("org.openjfx:javafx-graphics:17")
     implementation("org.openjfx:javafx-base:17")
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1'
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

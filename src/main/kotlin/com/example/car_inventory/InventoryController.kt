@@ -123,23 +123,32 @@ class InventoryController : Initializable {
         //store original car list
         originalCarList = FXCollections.observableArrayList(tableView.items)
 
+        //Load cars from file
+        originalCarList = FXCollections.observableArrayList(CarStorage.loadCars())
+        tableView.items.setAll(originalCarList)
+
         //adds listener function to text property, listener will be called when text content changes
         searchBar.textProperty().addListener { _, _, _ -> filterCars() }
-
+        unsoldCheck.selectedProperty().addListener { _, _, _ -> filterCars() }
+        soldCheck.selectedProperty().addListener { _, _, _ -> filterCars() }
     }
 
     // search function / filter function
     private fun filterCars() {
         val searchText = searchBar.text.lowercase()
-        val filteredCars = if (searchText.isBlank()) {
-            originalCarList
-        } else {
-            originalCarList.filter { car ->
+        val showUnsold = unsoldCheck.isSelected
+        val showSold = soldCheck.isSelected
+
+        val filteredCars = originalCarList.filter {car ->
+            val matchesSearchText = searchText.isBlank() ||
                 car.make.lowercase().contains(searchText) ||
                 car.model.lowercase().contains(searchText) ||
                 car.year.lowercase().contains(searchText) ||
                 car.vin.lowercase().contains(searchText)
-            }
+
+            val matchesUnsoldSoldFilter = (!showUnsold && !showSold) || (showUnsold && car.soldDate == null) || (showSold && car.soldDate != null)
+
+            matchesSearchText&& matchesUnsoldSoldFilter
         }
         tableView.items.setAll(filteredCars)
     }
@@ -225,6 +234,10 @@ class InventoryController : Initializable {
             }
         }
     }
+
+        fun saveInventory() {
+            CarStorage.saveCars(tableView.items)
+        }
 }
 
 data class Car(
