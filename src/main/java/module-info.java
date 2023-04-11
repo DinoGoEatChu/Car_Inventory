@@ -7,6 +7,7 @@ module com.example.car_inventory {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.kotlin;
     requires com.fasterxml.jackson.datatype.jsr310;
+    requires kotlin.csv.jvm;
 
     opens com.example.car_inventory to javafx.fxml, com.fasterxml.jackson.databind;
 

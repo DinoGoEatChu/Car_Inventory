@@ -1,8 +1,8 @@
 package com.example.car_inventory
 
+import com.github.doyaaaaaken.kotlincsv.client.CsvReader
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
@@ -10,14 +10,23 @@ import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.control.cell.PropertyValueFactory
+import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
+import java.io.*
 import java.net.URL
 import java.time.LocalDate
 import java.util.*
 
 class InventoryController : Initializable {
 
+
+    @FXML
+    lateinit var exportToCSVButton: Button
+
+
+    @FXML
+    lateinit var importCSVButton: Button
 
     @FXML
     lateinit var deleteCar: Button
@@ -74,7 +83,7 @@ class InventoryController : Initializable {
     lateinit var from: TableColumn<Car, String>
 
     @FXML
-    lateinit var purchaseDate: TableColumn<Car, LocalDate>
+    lateinit var purchaseDate: TableColumn<Car, LocalDate?>
 
     @FXML
     lateinit var mileage: TableColumn<Car, String>
@@ -100,28 +109,28 @@ class InventoryController : Initializable {
     private lateinit var originalCarList: ObservableList<Car>
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
-        stockID.cellValueFactory = PropertyValueFactory<Car, String>("stockID")
-        make.cellValueFactory = PropertyValueFactory<Car, String>("make")
-        model.cellValueFactory = PropertyValueFactory<Car, String>("model")
-        year.cellValueFactory = PropertyValueFactory<Car, String>("year")
-        vin.cellValueFactory = PropertyValueFactory<Car, String>("vin")
-        mileage.cellValueFactory = PropertyValueFactory<Car, String>("mileage")
+        stockID.cellValueFactory = PropertyValueFactory("stockID")
+        make.cellValueFactory = PropertyValueFactory("make")
+        model.cellValueFactory = PropertyValueFactory("model")
+        year.cellValueFactory = PropertyValueFactory("year")
+        vin.cellValueFactory = PropertyValueFactory("vin")
+        mileage.cellValueFactory = PropertyValueFactory("mileage")
         purchaseDate.cellValueFactory = PropertyValueFactory<Car, LocalDate>("purchaseDate")
-        from.cellValueFactory = PropertyValueFactory<Car, String>("from")
-        cost.cellValueFactory = PropertyValueFactory<Car, String>("cost")
+        from.cellValueFactory = PropertyValueFactory("from")
+        cost.cellValueFactory = PropertyValueFactory("cost")
         soldDate.cellValueFactory = PropertyValueFactory<Car, LocalDate?>("soldDate")
-        salePrice.cellValueFactory = PropertyValueFactory<Car, String>("salePrice")
-        soldTo.cellValueFactory = PropertyValueFactory<Car, String>("soldTo")
-        invoices.cellValueFactory = PropertyValueFactory<Car, String>("invoices")
-        total.cellValueFactory = PropertyValueFactory<Car, String>("total")
-        towing.cellValueFactory = PropertyValueFactory<Car, String>("towing")
-        check.cellValueFactory = PropertyValueFactory<Car, String>("check")
-        labor.cellValueFactory = PropertyValueFactory<Car, String>("labor")
-        title.cellValueFactory = PropertyValueFactory<Car, String>("title")
-        financed.cellValueFactory = PropertyValueFactory<Car, String>("financed")
+        salePrice.cellValueFactory = PropertyValueFactory("salePrice")
+        soldTo.cellValueFactory = PropertyValueFactory("soldTo")
+        invoices.cellValueFactory = PropertyValueFactory("invoices")
+        total.cellValueFactory = PropertyValueFactory("total")
+        towing.cellValueFactory = PropertyValueFactory("towing")
+        check.cellValueFactory = PropertyValueFactory("check")
+        labor.cellValueFactory = PropertyValueFactory("labor")
+        title.cellValueFactory = PropertyValueFactory("title")
+        financed.cellValueFactory = PropertyValueFactory("financed")
 
         //store original car list
-        originalCarList = FXCollections.observableArrayList(tableView.items)
+        originalCarList = FXCollections.observableArrayList(tableView.items.toMutableList())
 
         //Load cars from file
         originalCarList = FXCollections.observableArrayList(CarStorage.loadCars())
@@ -139,23 +148,24 @@ class InventoryController : Initializable {
         val showUnsold = unsoldCheck.isSelected
         val showSold = soldCheck.isSelected
 
-        val filteredCars = originalCarList.filter {car ->
+        val filteredCars = originalCarList.filter { car ->
             val matchesSearchText = searchText.isBlank() ||
-                car.make.lowercase().contains(searchText) ||
-                car.model.lowercase().contains(searchText) ||
-                car.year.lowercase().contains(searchText) ||
-                car.vin.lowercase().contains(searchText)
+                    car.make.lowercase().contains(searchText) ||
+                    car.model.lowercase().contains(searchText) ||
+                    car.year.lowercase().contains(searchText) ||
+                    car.vin.lowercase().contains(searchText)
 
-            val matchesUnsoldSoldFilter = (!showUnsold && !showSold) || (showUnsold && car.soldDate == null) || (showSold && car.soldDate != null)
+            val matchesUnsoldSoldFilter =
+                (!showUnsold && !showSold) || (showUnsold && car.soldDate == null) || (showSold && car.soldDate != null)
 
-            matchesSearchText&& matchesUnsoldSoldFilter
+            matchesSearchText && matchesUnsoldSoldFilter
         }
         tableView.items.setAll(filteredCars)
     }
 
 
     @FXML
-    fun onNew(actionEvent: ActionEvent) {
+    fun onNew() {
         // Load the NewCar.fxml file
         val fxmlLoader = FXMLLoader(javaClass.getResource("newCar.fxml"))
         val newCarRoot = fxmlLoader.load<Parent>()
@@ -168,6 +178,7 @@ class InventoryController : Initializable {
             // Add the updated car to the tableView
             tableView.items.add(updatedCar)
             originalCarList.add(updatedCar)
+            saveInventory()
         }
 
 
@@ -180,7 +191,7 @@ class InventoryController : Initializable {
     }
 
     @FXML
-    fun onChange(actionEvent: ActionEvent) {
+    fun onChange() {
         val selectedCar = tableView.selectionModel.selectedItem
         val selectedIndex = tableView.selectionModel.selectedIndex
 
@@ -190,6 +201,7 @@ class InventoryController : Initializable {
                 // Update the selected car in the tableView
                 tableView.items[selectedIndex] = updatedCar
                 originalCarList[selectedIndex] = updatedCar
+                saveInventory()
             }
 
             // Load the modify car FXML file and set the controller factory
@@ -213,7 +225,7 @@ class InventoryController : Initializable {
     }
 
     @FXML
-    fun onDelete(actionEvent: ActionEvent) {
+    fun onDelete() {
         // Handle the delete car button click event
         val selectedCar = tableView.selectionModel.selectedItem
         if (selectedCar != null) {
@@ -229,16 +241,124 @@ class InventoryController : Initializable {
                 val selectedIndex = tableView.selectionModel.selectedIndex
                 tableView.items.remove(selectedCar)
                 originalCarList.removeAt(selectedIndex)
+                saveInventory()
             } else if (result.get() == ButtonType.CANCEL) {
                 return
             }
         }
     }
 
-        fun saveInventory() {
-            CarStorage.saveCars(tableView.items)
+    fun saveInventory() {
+        CarStorage.saveCars(originalCarList)
+    }
+
+    @FXML
+    fun loadCarsFromCsv() {
+        val fileChooser = FileChooser()
+        fileChooser.title = "Select CSV File"
+        fileChooser.extensionFilters.add(
+            FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        )
+        val selectedFile = fileChooser.showOpenDialog(null)
+
+        if (selectedFile != null) {
+            val cars = mutableListOf<Car>()
+            val csvReader = CsvReader()
+            csvReader.open(selectedFile) {
+                readAllWithHeaderAsSequence().forEach { row: Map<String, String> ->
+                    if (row.size == 19) {
+                        val car = Car(
+                            stockID = row["stockID"].orEmpty().trim(),
+                            make = row["make"].orEmpty().trim(),
+                            model = row["model"].orEmpty().trim(),
+                            year = row["year"].orEmpty().trim(),
+                            vin = row["vin"].orEmpty().trim(),
+                            mileage = row["mileage"].orEmpty().trim(),
+                            purchaseDate = row["purchaseDate"]?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) },
+                            from = row["from"].orEmpty().trim(),
+                            cost = row["cost"].orEmpty().trim(),
+                            soldDate = row["soldDate"]?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) },
+                            salePrice = row["salePrice"].orEmpty().trim(),
+                            soldTo = row["soldTo"].orEmpty().trim(),
+                            invoices = row["invoices"].orEmpty().trim(),
+                            total = row["total"].orEmpty().trim(),
+                            towing = row["towing"].orEmpty().trim(),
+                            check = row["check"].orEmpty().trim(),
+                            labor = row["labor"].orEmpty().trim(),
+                            title = row["title"].orEmpty().trim(),
+                            financed = row["financed"].orEmpty().trim(),
+                        )
+                        cars.add(car)
+                    }
+                }
+            }
+
+            originalCarList.addAll(cars)
+            tableView.items.setAll(originalCarList)
+            saveInventory()
         }
+    }
+
+
+    @Throws(IOException::class)
+    fun exportCarsToFile(cars: List<Car>, outputFile: String) {
+        FileWriter(outputFile).use { writer ->
+            // Write header
+            writer.append("stockID,make,model,year,vin,mileage,purchaseDate,from,cost,soldDate,salePrice,soldTo,invoices,total,towing,check,labor,title,financed\n")
+
+            // Write data
+            for (car in cars) {
+                writer.append(car.stockID).append(',')
+                    .append(car.make).append(',')
+                    .append(car.model).append(',')
+                    .append(car.year).append(',')
+                    .append(car.vin).append(',')
+                    .append(car.mileage).append(',')
+                    .append(car.purchaseDate?.toString() ?: "").append(',')
+                    .append(car.from).append(',')
+                    .append(car.cost).append(',')
+                    .append(car.soldDate?.toString() ?: "").append(',')
+                    .append(car.salePrice).append(',')
+                    .append(car.soldTo).append(',')
+                    .append(car.invoices).append(',')
+                    .append(car.total).append(',')
+                    .append(car.towing).append(',')
+                    .append(car.check).append(',')
+                    .append(car.labor).append(',')
+                    .append(car.title).append(',')
+                    .append(car.financed).append('\n')
+            }
+        }
+    }
+
+    @FXML
+    fun exportCarsToCsv() {
+        // Create a file chooser to select the CSV file
+        val fileChooser = FileChooser()
+        fileChooser.title = "Save CSV File"
+        fileChooser.extensionFilters.add(
+            FileChooser.ExtensionFilter("CSV Files", "*.csv")
+        )
+        val selectedFile = fileChooser.showSaveDialog(null) // Changed from showOpenDialog to showSaveDialog
+
+        // If a file is selected, export the cars to the CSV file
+        if (selectedFile != null) {
+            try {
+                exportCarsToFile(tableView.items, selectedFile.absolutePath)
+                val alert = Alert(Alert.AlertType.INFORMATION)
+                alert.title = "Export Successful"
+                alert.headerText = "Cars exported to CSV file successfully!"
+                alert.showAndWait()
+            } catch (e: IOException) {
+                val alert = Alert(Alert.AlertType.ERROR)
+                alert.title = "Export Failed"
+                alert.headerText = "Failed to export cars to CSV file."
+                alert.showAndWait()
+            }
+        }
+    }
 }
+
 
 data class Car(
     val stockID: String,
@@ -247,7 +367,7 @@ data class Car(
     val year: String,
     val vin: String,
     val mileage: String,
-    val purchaseDate: LocalDate,
+    val purchaseDate: LocalDate?,
     val from: String,
     val cost: String,
     val soldDate: LocalDate?,

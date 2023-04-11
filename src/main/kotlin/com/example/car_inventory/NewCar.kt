@@ -8,12 +8,11 @@ import javafx.scene.control.DatePicker
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import java.net.URL
-import java.time.LocalDate
 import java.util.*
 
 class NewCar : Initializable {
-    var car: Car? = null
-    var onCarUpdated: ((Car) -> Unit)? = null
+    private var car: Car? = null
+    private var onCarUpdated: ((Car) -> Unit)? = null
 
     fun init(car: Car?, onCarUpdated: ((Car) -> Unit)?) {
         this.car = car
@@ -57,7 +56,7 @@ class NewCar : Initializable {
             year.text,
             vin.text,
             miles.text,
-            datePur.value ?: LocalDate.now(),
+            datePur.value,
             from.text,
             cost.text,
             dateSold.value,
@@ -77,7 +76,7 @@ class NewCar : Initializable {
     }
 
     @FXML
-    fun onCancel(actionEvent: ActionEvent) {
+    fun onCancel() {
         cancelButton.scene.window.hide()
     }
 

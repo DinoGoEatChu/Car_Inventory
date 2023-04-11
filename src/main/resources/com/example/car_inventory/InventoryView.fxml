@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="tab" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1590.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.car_inventory.InventoryController">
-    <TableView id="inventoryTable" fx:id="tableView" layoutX="8.0" layoutY="43.0" prefHeight="637.0" prefWidth="1573.0">
+<AnchorPane id="tab" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1700.0" style="-fx-background-color: #c0c0c0;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.car_inventory.InventoryController">
+    <TableView id="inventoryTable" fx:id="tableView" layoutX="8.0" layoutY="43.0" prefHeight="637.0" prefWidth="1650.0" style="-fx-background-color: #e4e4e4;">
         <columns>
             <TableColumn id="stockColumn" fx:id="stockID" prefWidth="47.428574562072754" text="Stock #" />
             <TableColumn id="make" fx:id="make" prefWidth="69.4285888671875" text="Make" />
@@ -24,7 +24,7 @@
             <TableColumn id="check" fx:id="check" prefWidth="53.142822265625" text="Check" />
             <TableColumn id="Labor" fx:id="labor" prefWidth="62.2857666015625" text="Labor" />
             <TableColumn id="title" fx:id="title" prefWidth="48.0" text="Title" />
-            <TableColumn id="financed" fx:id="financed" prefWidth="144.5714111328125" text="Financed" />
+            <TableColumn id="financed" fx:id="financed" prefWidth="127.3333740234375" text="Financed" />
         </columns>
     </TableView>
     <TextField id="searchBar" fx:id="searchBar" layoutX="710.0" layoutY="14.0" prefHeight="25.0" prefWidth="161.0" />
@@ -33,4 +33,6 @@
     <Button id="newCarButton" fx:id="newCar" layoutX="621.0" layoutY="699.0" mnemonicParsing="false" onAction="#onNew" text="NEW" />
     <Button id="changeCarButton" fx:id="changeCar" layoutX="784.0" layoutY="699.0" mnemonicParsing="false" onAction="#onChange" text="CHANGE" />
     <Button id="deleteCarButton" fx:id="deleteCar" layoutX="963.0" layoutY="699.0" mnemonicParsing="false" onAction="#onDelete" text="DELETE" />
+   <Button fx:id="importCSVButton" layoutX="1339.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadCarsFromCsv" text="Import" />
+   <Button fx:id="exportToCSVButton" layoutX="1445.0" layoutY="14.0" mnemonicParsing="false" onAction="#exportCarsToCsv" text="Export" />
 </AnchorPane>
