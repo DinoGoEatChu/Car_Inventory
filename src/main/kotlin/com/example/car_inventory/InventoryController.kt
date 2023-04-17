@@ -1,7 +1,6 @@
 package com.example.car_inventory
 
 import com.github.doyaaaaaken.kotlincsv.client.CsvReader
-import com.github.doyaaaaaken.kotlincsv.util.MalformedCSVException
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
@@ -24,8 +23,13 @@ class InventoryController : Initializable {
 
 
     @FXML
-    lateinit var exportToCSVButton: Button
+    lateinit var unsoldCars: Label
 
+    @FXML
+    lateinit var carsSold: Label
+
+    @FXML
+    lateinit var exportToCSVButton: Button
 
     @FXML
     lateinit var importCSVButton: Button
@@ -142,6 +146,7 @@ class InventoryController : Initializable {
         searchBar.textProperty().addListener { _, _, _ -> filterCars() }
         unsoldCheck.selectedProperty().addListener { _, _, _ -> filterCars() }
         soldCheck.selectedProperty().addListener { _, _, _ -> filterCars() }
+        updateSoldUnsoldLabels()
     }
 
     // search function / filter function
@@ -163,6 +168,7 @@ class InventoryController : Initializable {
             matchesSearchText && matchesUnsoldSoldFilter
         }
         tableView.items.setAll(filteredCars)
+        updateSoldUnsoldLabels()
     }
 
 
@@ -180,6 +186,7 @@ class InventoryController : Initializable {
             // Add the updated car to the tableView
             tableView.items.add(updatedCar)
             originalCarList.add(updatedCar)
+            updateSoldUnsoldLabels()
             saveInventory()
         }
 
@@ -203,6 +210,7 @@ class InventoryController : Initializable {
                 // Update the selected car in the tableView
                 tableView.items[selectedIndex] = updatedCar
                 originalCarList[selectedIndex] = updatedCar
+                updateSoldUnsoldLabels()
                 saveInventory()
             }
 
@@ -243,6 +251,7 @@ class InventoryController : Initializable {
                 val selectedIndex = tableView.selectionModel.selectedIndex
                 tableView.items.remove(selectedCar)
                 originalCarList.removeAt(selectedIndex)
+                updateSoldUnsoldLabels()
                 saveInventory()
             } else if (result.get() == ButtonType.CANCEL) {
                 return
@@ -303,6 +312,7 @@ class InventoryController : Initializable {
 
             originalCarList.addAll(cars)
             tableView.items.setAll(originalCarList)
+            updateSoldUnsoldLabels()
             saveInventory()
         }
     }
@@ -346,7 +356,7 @@ class InventoryController : Initializable {
         fileChooser.extensionFilters.add(
             FileChooser.ExtensionFilter("CSV Files", "*.csv")
         )
-        val selectedFile = fileChooser.showSaveDialog(null) // Changed from showOpenDialog to showSaveDialog
+        val selectedFile = fileChooser.showSaveDialog(null)
 
         // If a file is selected, export the cars to the CSV file
         if (selectedFile != null) {
@@ -364,6 +374,15 @@ class InventoryController : Initializable {
             }
         }
     }
+
+    private fun updateSoldUnsoldLabels() {
+        val soldCount = tableView.items.count { it.soldDate != null }
+        val unsoldCount = tableView.items.count { it.soldDate == null }
+
+        carsSold.text = "Sold: $soldCount"
+        unsoldCars.text = "Unsold: $unsoldCount"
+    }
+
 }
 
 

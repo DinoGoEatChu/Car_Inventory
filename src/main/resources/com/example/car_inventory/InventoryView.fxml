@@ -27,12 +27,14 @@
             <TableColumn id="financed" fx:id="financed" prefWidth="127.3333740234375" text="Financed" />
         </columns>
     </TableView>
-    <TextField id="searchBar" fx:id="searchBar" layoutX="710.0" layoutY="14.0" prefHeight="25.0" prefWidth="161.0" />
-    <CheckBox id="soldCheck" fx:id="soldCheck" layoutX="166.0" layoutY="18.0" mnemonicParsing="false" text="SOLD Cars" />
-    <CheckBox id="unsoldCheck" fx:id="unsoldCheck" layoutX="271.0" layoutY="18.0" mnemonicParsing="false" text="UNSOLD Cars" />
-    <Button id="newCarButton" fx:id="newCar" layoutX="621.0" layoutY="699.0" mnemonicParsing="false" onAction="#onNew" text="NEW" />
-    <Button id="changeCarButton" fx:id="changeCar" layoutX="784.0" layoutY="699.0" mnemonicParsing="false" onAction="#onChange" text="CHANGE" />
-    <Button id="deleteCarButton" fx:id="deleteCar" layoutX="963.0" layoutY="699.0" mnemonicParsing="false" onAction="#onDelete" text="DELETE" />
-   <Button fx:id="importCSVButton" layoutX="1339.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadCarsFromCsv" text="Import" />
-   <Button fx:id="exportToCSVButton" layoutX="1445.0" layoutY="14.0" mnemonicParsing="false" onAction="#exportCarsToCsv" text="Export" />
+    <TextField id="searchBar" fx:id="searchBar" layoutX="710.0" layoutY="8.5" prefHeight="25.0" prefWidth="161.0" promptText="Search" scaleX="1.5" scaleY="1.5" scaleZ="1.5" />
+    <CheckBox id="soldCheck" fx:id="soldCheck" layoutX="166.0" layoutY="18.0" mnemonicParsing="false" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="SOLD Cars" />
+    <CheckBox id="unsoldCheck" fx:id="unsoldCheck" layoutX="300.0" layoutY="18.0" mnemonicParsing="false" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="UNSOLD Cars" />
+    <Button id="newCarButton" fx:id="newCar" layoutX="621.0" layoutY="699.0" mnemonicParsing="false" onAction="#onNew" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="NEW" />
+    <Button id="changeCarButton" fx:id="changeCar" layoutX="784.0" layoutY="699.0" mnemonicParsing="false" onAction="#onChange" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="CHANGE" />
+    <Button id="deleteCarButton" fx:id="deleteCar" layoutX="963.0" layoutY="699.0" mnemonicParsing="false" onAction="#onDelete" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="DELETE" />
+   <Button fx:id="importCSVButton" layoutX="1339.0" layoutY="8.0" mnemonicParsing="false" onAction="#loadCarsFromCsv" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Import" />
+   <Button fx:id="exportToCSVButton" layoutX="1445.0" layoutY="8.0" mnemonicParsing="false" onAction="#exportCarsToCsv" scaleX="1.5" scaleY="1.5" scaleZ="1.5" text="Export" />
+   <Label fx:id="carsSold" layoutX="69.0" layoutY="712.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Sold: " />
+   <Label fx:id="unsoldCars" layoutX="291.0" layoutY="712.0" scaleX="2.0" scaleY="2.0" scaleZ="2.0" text="Unsold: " />
 </AnchorPane>
