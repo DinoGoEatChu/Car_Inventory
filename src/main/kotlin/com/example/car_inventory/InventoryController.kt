@@ -1,6 +1,7 @@
 package com.example.car_inventory
 
 import com.github.doyaaaaaken.kotlincsv.client.CsvReader
+import com.github.doyaaaaaken.kotlincsv.util.MalformedCSVException
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.fxml.FXML
@@ -16,6 +17,7 @@ import javafx.stage.Stage
 import java.io.*
 import java.net.URL
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class InventoryController : Initializable {
@@ -261,26 +263,32 @@ class InventoryController : Initializable {
         )
         val selectedFile = fileChooser.showOpenDialog(null)
 
+        val fileContent = selectedFile.readText()
+        val lines = fileContent.lines().toMutableList()
+        lines[0] = lines[0].lowercase()
+        val csvContent = lines.joinToString(separator = "\n")
+
         if (selectedFile != null) {
             val cars = mutableListOf<Car>()
             val csvReader = CsvReader()
-            csvReader.open(selectedFile) {
-                readAllWithHeaderAsSequence().forEach { row: Map<String, String> ->
+            val dateFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
+            csvReader.open(csvContent.byteInputStream()) {
+                readAllWithHeaderAsSequence().map { it.mapKeys { entry -> entry.key.lowercase() } }.forEach { row: Map<String, String> ->
                     if (row.size == 19) {
                         val car = Car(
-                            stockID = row["stockID"].orEmpty().trim(),
+                            stockID = row["stock no."].orEmpty().trim(),
                             make = row["make"].orEmpty().trim(),
                             model = row["model"].orEmpty().trim(),
                             year = row["year"].orEmpty().trim(),
-                            vin = row["vin"].orEmpty().trim(),
-                            mileage = row["mileage"].orEmpty().trim(),
-                            purchaseDate = row["purchaseDate"]?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) },
+                            vin = row["v.i.n."].orEmpty().trim(),
+                            mileage = row["milage"].orEmpty().trim(),
+                            purchaseDate = row["date purchased"]?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it, dateFormatter) },
                             from = row["from"].orEmpty().trim(),
                             cost = row["cost"].orEmpty().trim(),
-                            soldDate = row["soldDate"]?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it) },
-                            salePrice = row["salePrice"].orEmpty().trim(),
-                            soldTo = row["soldTo"].orEmpty().trim(),
-                            invoices = row["invoices"].orEmpty().trim(),
+                            soldDate = row["date sold"]?.trim()?.takeIf { it.isNotBlank() }?.let { LocalDate.parse(it, dateFormatter) },
+                            salePrice = row["sale price"].orEmpty().trim(),
+                            soldTo = row["sold to"].orEmpty().trim(),
+                            invoices = row["parts & invoices"].orEmpty().trim(),
                             total = row["total"].orEmpty().trim(),
                             towing = row["towing"].orEmpty().trim(),
                             check = row["check"].orEmpty().trim(),
@@ -298,7 +306,6 @@ class InventoryController : Initializable {
             saveInventory()
         }
     }
-
 
     @Throws(IOException::class)
     fun exportCarsToFile(cars: List<Car>, outputFile: String) {
@@ -326,7 +333,7 @@ class InventoryController : Initializable {
                     .append(car.check).append(',')
                     .append(car.labor).append(',')
                     .append(car.title).append(',')
-                    .append(car.financed).append('\n')
+                    .append("\"").append(car.financed.replace("\"", "\"\"").replace("\n", "\r\n")).append("\"\n")
             }
         }
     }
