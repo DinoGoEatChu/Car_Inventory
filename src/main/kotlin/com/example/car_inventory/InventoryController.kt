@@ -21,7 +21,6 @@ import java.util.*
 
 class InventoryController : Initializable {
 
-
     @FXML
     lateinit var unsoldCars: Label
 
@@ -135,14 +134,14 @@ class InventoryController : Initializable {
         title.cellValueFactory = PropertyValueFactory("title")
         financed.cellValueFactory = PropertyValueFactory("financed")
 
-        //store original car list
+        // store original car list
         originalCarList = FXCollections.observableArrayList(tableView.items.toMutableList())
 
-        //Load cars from file
+        // Load cars from file
         originalCarList = FXCollections.observableArrayList(CarStorage.loadCars())
         tableView.items.setAll(originalCarList)
 
-        //adds listener function to text property, listener will be called when text content changes
+        // adds listener function to text property, listener will be called when text content changes
         searchBar.textProperty().addListener { _, _, _ -> filterCars() }
         unsoldCheck.selectedProperty().addListener { _, _, _ -> filterCars() }
         soldCheck.selectedProperty().addListener { _, _, _ -> filterCars() }
@@ -157,10 +156,10 @@ class InventoryController : Initializable {
 
         val filteredCars = originalCarList.filter { car ->
             val matchesSearchText = searchText.isBlank() ||
-                    car.make.lowercase().contains(searchText) ||
-                    car.model.lowercase().contains(searchText) ||
-                    car.year.lowercase().contains(searchText) ||
-                    car.vin.lowercase().contains(searchText)
+                car.make.lowercase().contains(searchText) ||
+                car.model.lowercase().contains(searchText) ||
+                car.year.lowercase().contains(searchText) ||
+                car.vin.lowercase().contains(searchText)
 
             val matchesUnsoldSoldFilter =
                 (!showUnsold && !showSold) || (showUnsold && car.soldDate == null) || (showSold && car.soldDate != null)
@@ -170,7 +169,6 @@ class InventoryController : Initializable {
         tableView.items.setAll(filteredCars)
         updateSoldUnsoldLabels()
     }
-
 
     @FXML
     fun onNew() {
@@ -189,7 +187,6 @@ class InventoryController : Initializable {
             updateSoldUnsoldLabels()
             saveInventory()
         }
-
 
         // Show the NewCar window
         val newCarStage = Stage()
@@ -224,7 +221,6 @@ class InventoryController : Initializable {
             val stage = Stage()
             stage.scene = scene
             stage.show()
-
         } else {
             // Show an alert if no car is selected
             val alert = Alert(Alert.AlertType.WARNING)
@@ -268,7 +264,7 @@ class InventoryController : Initializable {
         val fileChooser = FileChooser()
         fileChooser.title = "Select CSV File"
         fileChooser.extensionFilters.add(
-            FileChooser.ExtensionFilter("CSV Files", "*.csv")
+            FileChooser.ExtensionFilter("CSV Files", "*.csv"),
         )
         val selectedFile = fileChooser.showOpenDialog(null)
 
@@ -333,9 +329,9 @@ class InventoryController : Initializable {
                     .append(car.mileage).append(',')
                     .append(car.purchaseDate?.toString() ?: "").append(',')
                     .append(car.from).append(',')
-                    .append(car.cost).append(',')
+                    .append("\"").append(car.cost).append("\"").append(',')
                     .append(car.soldDate?.toString() ?: "").append(',')
-                    .append(car.salePrice).append(',')
+                    .append("\"").append(car.salePrice).append("\"").append(',')
                     .append(car.soldTo).append(',')
                     .append(car.invoices).append(',')
                     .append(car.total).append(',')
@@ -354,7 +350,7 @@ class InventoryController : Initializable {
         val fileChooser = FileChooser()
         fileChooser.title = "Save CSV File"
         fileChooser.extensionFilters.add(
-            FileChooser.ExtensionFilter("CSV Files", "*.csv")
+            FileChooser.ExtensionFilter("CSV Files", "*.csv"),
         )
         val selectedFile = fileChooser.showSaveDialog(null)
 
@@ -382,9 +378,7 @@ class InventoryController : Initializable {
         carsSold.text = "Sold: $soldCount"
         unsoldCars.text = "Unsold: $unsoldCount"
     }
-
 }
-
 
 data class Car(
     val stockID: String,
@@ -407,4 +401,3 @@ data class Car(
     val title: String,
     val financed: String,
 )
-
