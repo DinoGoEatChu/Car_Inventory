@@ -10,9 +10,9 @@ import java.net.URL
 import java.util.*
 
 
-class ModifyCar(private val selectedCar: Car, private val callbackFn: (Car) -> Unit) : Initializable {
+class ModifyCar(private val selectedIndex: Int, private val selectedCar: Car, private val callbackFn: (Int, Car) -> Unit) : Initializable {
     private var car: Car? = null
-    private var onUpdate: ((Car) -> Unit)? = null
+    private var onUpdate: ((Int, Car) -> Unit)? = null
 
     init {
         car = selectedCar
@@ -97,8 +97,10 @@ class ModifyCar(private val selectedCar: Car, private val callbackFn: (Car) -> U
             financed.text,
         )
 
+
+
         // Call the onUpdate callback to pass the updated car information back to InventoryController
-        callbackFn?.invoke(updatedCar)
+        callbackFn.invoke(selectedIndex, updatedCar)
 
         // Close the modify car window
         saveButton.scene.window.hide()
