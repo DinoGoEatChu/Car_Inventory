@@ -3,6 +3,7 @@ package com.example.car_inventory
 import com.github.doyaaaaaken.kotlincsv.client.CsvReader
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
+import javafx.collections.transformation.FilteredList
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
@@ -18,6 +19,7 @@ import java.net.URL
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.function.Predicate
 
 class InventoryController : Initializable {
 
@@ -149,6 +151,7 @@ class InventoryController : Initializable {
     }
 
     // search function / filter function
+    // search function / filter function
     private fun filterCars() {
         val searchText = searchBar.text.lowercase()
         val showUnsold = unsoldCheck.isSelected
@@ -156,10 +159,10 @@ class InventoryController : Initializable {
 
         val filteredCars = originalCarList.filter { car ->
             val matchesSearchText = searchText.isBlank() ||
-                car.make.lowercase().contains(searchText) ||
-                car.model.lowercase().contains(searchText) ||
-                car.year.lowercase().contains(searchText) ||
-                car.vin.lowercase().contains(searchText)
+                    car.make.lowercase().contains(searchText) ||
+                    car.model.lowercase().contains(searchText) ||
+                    car.year.lowercase().contains(searchText) ||
+                    car.vin.lowercase().contains(searchText)
 
             val matchesUnsoldSoldFilter =
                 (!showUnsold && !showSold) || (showUnsold && car.soldDate == null) || (showSold && car.soldDate != null)
@@ -196,17 +199,19 @@ class InventoryController : Initializable {
         newCarStage.show()
     }
 
+
     @FXML
     fun onChange() {
         val selectedCar = tableView.selectionModel.selectedItem
         val selectedIndex = tableView.selectionModel.selectedIndex
 
         if (selectedCar != null && selectedIndex >= 0) {
+            val originalIndex =  originalCarList.indexOf(selectedCar)
             // Pass a callback function to the ModifyCarController
-            val modifyCar = ModifyCar(selectedCar) { updatedCar ->
+            val modifyCar = ModifyCar(originalIndex, selectedCar) { index, updatedCar ->
                 // Update the selected car in the tableView
+                originalCarList[index] = updatedCar
                 tableView.items[selectedIndex] = updatedCar
-                originalCarList[selectedIndex] = updatedCar
                 updateSoldUnsoldLabels()
                 saveInventory()
             }
